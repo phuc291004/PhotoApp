@@ -1,0 +1,11 @@
+.main-topbar-buffer {
+  margin-top: 70px;
+}
+
+.main-grid-item {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-width: 100%;
+  height: calc(100vh - 85px);
+  padding: 10px;
+}
