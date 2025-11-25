@@ -1,5 +1,3 @@
-// client/src/lib/fetchModelData.js
-
 /**
  * fetchModel - Lấy dữ liệu từ backend thật (thay vì dữ liệu giả)
  * @param {string} url - Đường dẫn mà frontend đang gọi
