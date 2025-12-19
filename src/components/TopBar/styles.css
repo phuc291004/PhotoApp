@@ -2,3 +2,19 @@
   height: 60;
   justify-content: "center";
 }
+
+.logout-btn {
+  color: white !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  border-radius: 12px !important;
+  padding: 9px 22px !important; /* py: 0.9 / px: 2.2 tương ứng */
+  text-transform: none !important;
+  font-weight: 600 !important;
+  backdrop-filter: blur(4px);
+  transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 255, 255, 0.18) !important;
+  transform: translateY(-1px);
+}
