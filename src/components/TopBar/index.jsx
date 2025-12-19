@@ -1,73 +1,134 @@
-// client/src/components/TopBar/index.jsx
-import React, { useState, useEffect } from "react";
-import { AppBar, Toolbar, Typography, Box } from "@mui/material";
+import React, { useState } from "react";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Box,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
+import { useUser } from "../UserContext";
+import { useNavigate } from "react-router-dom";
+
 import "./styles.css";
-import { useLocation } from "react-router-dom";
-import fetchModel from "../../lib/fetchModelData";
 
 function TopBar() {
-  const location = useLocation();
-  const pathParts = location.pathname.split("/").filter(Boolean);
+  const { currentUser, logout } = useUser();
+  const navigate = useNavigate();
 
-  const [context, setContext] = useState("PhotoShare App");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
 
-  useEffect(() => {
-    async function updateContext() {
-      let newContext = "PhotoShare App";
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
 
-      if (pathParts.length === 0 || location.pathname === "/") {
-        newContext = "PhotoShare App";
-      }
-      // Danh sách user
-      else if (pathParts[0] === "users" && pathParts.length === 1) {
-        newContext = "User List";
-      }
-      // Trang chi tiết user: /users/:id
-      else if (pathParts[0] === "users" && pathParts[1]) {
-        try {
-          const user = await fetchModel(`/user/${pathParts[1]}`);
-          newContext = user ? `${user.last_name}` : "User Detail";
-        } catch {
-          newContext = "User Detail";
-        }
-      }
-      // Trang ảnh: /photos/:id
-      else if (pathParts[0] === "photos" && pathParts[1]) {
-        try {
-          const user = await fetchModel(`/user/${pathParts[1]}`);
-          newContext = user ? `Photos of ${user.last_name}` : "User Photos";
-        } catch {
-          newContext = "User Photos";
-        }
-      }
-      // Trang comment: /comments-of/:id
-      else if (pathParts[0] === "comments-of" && pathParts[1]) {
-        try {
-          const user = await fetchModel(`/user/${pathParts[1]}`);
-          newContext = user ? `Comments by ${user.last_name}` : "User Comments";
-        } catch {
-          newContext = "User Comments";
-        }
-      }
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-      setContext(newContext);
+    setSelectedFile(file);
+    setPreview(URL.createObjectURL(file));
+    setOpenDialog(true);
+  };
+
+  const handlePostPhoto = async () => {
+    if (!selectedFile) return;
+
+    const formData = new FormData();
+    formData.append("photo", selectedFile); // ✅ CHỈ GỬI ẢNH
+
+    const res = await fetch("https://74t8mc-8081.csb.app/api/photo/new", {
+      method: "POST",
+      credentials: "include",
+      body: formData,
+    });
+
+    if (!res.ok) {
+      alert("Upload failed");
+      return;
     }
 
-    updateContext();
-  }, [location.pathname]);
+    // reset
+    setOpenDialog(false);
+    setSelectedFile(null);
+    setPreview(null);
+
+    // reload để thấy ảnh mới
+    window.location.reload();
+  };
 
   return (
     <AppBar className="topbar-appBar" position="absolute">
       <Toolbar sx={{ justifyContent: "space-between" }}>
-        {/* Bên trái: Tên + MSSV */}
-        <Typography variant="h5" color="inherit">
-          Đặng Phúc - B22DCAT223
-        </Typography>
+        <Box display="flex" alignItems="center" gap={2}>
+          <Typography variant="h5" color="inherit">
+            Photo-Sharing
+          </Typography>
 
-        {/* Bên phải: Context đẩy ra ngoài cùng */}
-        <Typography variant="h6" color="inherit" sx={{ fontWeight: 500 }}>
-          {context}
-        </Typography>
+          <Button
+            color="inherit"
+            size="large"
+            sx={{
+              textTransform: "none",
+              py: 0.5,
+              px: 1.5,
+              minHeight: "auto",
+              fontSize: "1.05rem",
+            }}
+            component="label"
+          >
+            <b>Add Photo</b>
+            <input
+              type="file"
+              hidden
+              accept="image/*"
+              onChange={handleFileChange}
+            />
+          </Button>
+        </Box>
+
+        <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+          {currentUser ? (
+            <>
+              <Typography variant="subtitle1" color="inherit">
+                <b>Hi {currentUser.first_name}</b>
+              </Typography>
+              <Button className="logout-btn" onClick={handleLogout}>
+                Log out
+              </Button>
+            </>
+          ) : (
+            <Typography variant="subtitle1" color="inherit">
+              Please Login
+            </Typography>
+          )}
+        </Box>
+
+        {/* Dialog upload ảnh */}
+        <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+          <DialogTitle>New Photo</DialogTitle>
+          <DialogContent>
+            {preview && (
+              <img
+                src={preview}
+                alt="preview"
+                style={{ width: "100%", marginBottom: 12 }}
+              />
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
+            <Button variant="contained" onClick={handlePostPhoto}>
+              Post
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Toolbar>
     </AppBar>
   );

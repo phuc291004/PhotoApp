@@ -1,0 +1,86 @@
+/* ====== TOÀN TRANG LOGIN ====== */
+.fb-login-page {
+    height: 100vh;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+    padding: 20px;
+  }
+  
+  /* ====== BÊN TRÁI ====== */
+  .fb-left-box {
+    transform: translateY(-40px); /* nâng lên giống Facebook */
+  }
+  
+  .fb-logo {
+    font-size: 56px;
+    font-weight: 700;
+    color: #1877f2; /* màu của bạn */
+    margin: 0;
+  }
+  
+  .fb-slogan {
+    font-size: 24px;
+    width: 420px;
+    color: #1c1e21;
+    line-height: 1.4;
+    margin-top: 10px;
+  }
+  
+  /* ====== HỘP LOGIN BÊN PHẢI ====== */
+  .fb-login-container {
+    width: 350px;
+    padding: 20px 18px 25px;
+    background: #fff;
+    border-radius: 10px !important;
+    text-align: center;
+    transform: translateY(-40px); /* đẩy lên để cân đẹp */
+  }
+  
+  /* ====== INPUT ====== */
+  .fb-input {
+    margin-bottom: 15px !important;
+  }
+  
+  .fb-input input {
+    height: 16px;
+    padding: 14px !important;
+    font-size: 16px;
+  }
+  
+  /* ====== LỖI ====== */
+  .fb-error {
+    color: red;
+    margin-bottom: 5px;
+    font-size: 14px;
+  }
+  
+  /* ====== NÚT LOGIN ====== */
+  .fb-login-btn {
+    background-color: #1877f2 !important;
+    color: #fff !important;
+    font-size: 17px !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    padding: 9px 0 !important;
+    border-radius: 6px !important;
+    margin-top: 10px !important;
+  }
+  .fb-create-btn {
+    background-color: #66bb6a !important;
+    color: #fff !important;
+    font-size: 17px !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    padding: 9px 0 !important;
+    border-radius: 6px !important;
+    margin-top: 10px !important;
+    width: 200px !important;
+  }
+  hr {
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
+  
